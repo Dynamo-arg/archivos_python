@@ -35,6 +35,12 @@ def ej1():
     y cumpla el objetivo especificado, retornando la cantidad
     de líneas encontradas.
     '''
+    # Abro Archivo
+    fi = open("notas.txt", "r")
+    contar = 0
+    for line in fi:
+        contar += 1
+    print ("Este Archivo contiene:",contar ,"lineas.")
 
 
 def ej2():
@@ -57,6 +63,15 @@ def ej2():
 
     # fi = open('nota.txt', 'r')
     # fo = open(.......)
+    fi = open("notas.txt", "r")
+    fo = open('copiado.txt', 'w')
+    cantidad = 0
+    for line in fi:
+        fo.write(line)
+        cantidad += 1
+    fi.close()
+    fo.close()
+    print("Archivo copiado. Total de lienas:", cantidad)
 
     # Recuerde cerrar los archivos al final ;)
 
@@ -71,7 +86,25 @@ def ej3():
     de departamentos de 3 ambientes disponibles.
     Al finalizar el proceso, imprima en pantalla los resultados.
     '''
+    with open('propiedades.csv') as csvfile:
+        data = list(csv.DictReader(csvfile))
+    cantidad_filas = len(data)
+    ambientes_2 = 0
+    ambientes_3 = 0
+    for i in range(cantidad_filas):
+        # Puse 30 filas para no correr todo el archivo
+        if i == 30:
+            break
+        row = data[i]
+        ambientes = int(row.get("ambientes"))
+        if ambientes == 2:
+            ambientes_2 += 1
+        elif ambientes == 3:
+            ambientes_3 += 1
+    print("Cantidad de departamentos de 3 ambientes:", ambientes_3)
+    print("Cantidad de departamentos de 2 ambientes:", ambientes_2)
 
+        
 
 def ej4():
     # Ejercicios con diccionarios
@@ -90,6 +123,16 @@ def ej4():
     hasta ingresar como fruta/verdura la palabra "FIN"
 
     '''
+    contador = 0
+    while contador == 0:
+        fruta = str(input("ingrese nombre de la fruta. Si desea terminar ingrese FIN \n"))
+        if fruta == "fin":
+            break
+        else:
+            cantidad = int(input("Ingrese la cantidad de esa feruta \n"))
+            inventario[fruta] = cantidad
+        print(inventario)
+
 
     # En el bucle realizar:
     # Generar y completar el diccionario con las frutas y cantidades
@@ -134,12 +177,33 @@ def ej5():
     # Bucle....
 
     # writer.writerow({'Fruta Verdura': ....., 'Cantidad': ....})
+    # Abrir archivo para escritura
+    csvfile = open('frutas.csv', 'w', newline='')
+
+    # Detallar los nombres de las columnas
+    header = ['Fruta Verdura', 'Cantidad']
+    # Crear el objeto para escribir las lineas de archivo
+    # basado en los nombres de las columnas
+    writer = csv.DictWriter(csvfile, fieldnames=header)
+    writer.writeheader()
+
+    contador = 0
+    while contador == 0:
+        fruta = str(input("ingrese nombre de la fruta. Si desea terminar ingrese FIN \n"))
+        if fruta == "fin":
+            break
+        else:
+            cantidad = int(input("Ingrese la cantidad de esa feruta \n"))
+            fila = {'Fruta Verdura': fruta, 'Cantidad': cantidad}
+            writer.writerow(fila)
+
+    csvfile.close()
 
 
 if __name__ == '__main__':
     print("Bienvenidos a otra clase de Inove con Python")
-    ej1()
+    #ej1()
     #ej2()
     #ej3()
     #ej4()
-    #ej5()
+    ej5()
