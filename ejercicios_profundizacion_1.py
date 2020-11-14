@@ -11,10 +11,12 @@ Programa creado para que practiquen los conocimietos
 adquiridos durante la semana
 '''
 
-__author__ = "Inove Coding School"
+__author__ = "Sebastian Volpe"
 __email__ = "alumnos@inove.com.ar"
 __version__ = "1.3"
 
+import csv
+import re
 
 def ej1():
     print("Cuenta caracteres")
@@ -28,6 +30,14 @@ def ej1():
     Debe realizar la sumatoria total de la cantidad de caracteres de todas
     las líneas para obtener el total del archivo e imprimirlo en pantalla
     '''
+    fi = open('texto.txt', 'r')
+    lineas = 0
+    for line in fi:
+        largo = len(line)
+        cantidad_letras += largo
+        lineas += 1
+    print("Este Archivo contiene", lineas , "Total caracteres", cantidad_letras)
+    fi.close()
 
 
 def ej2():
@@ -49,6 +59,22 @@ def ej2():
     NOTA: Recuerde agregar el salto de línea "\n" a cada entrada
     de texto de la consola antes de copiar la archivo.
     '''
+    fo = open("ingreso.txt", "w")
+    bucle = 1
+    while bucle != 0:
+        texto = str(input("Ingrese texto para Añadir para terminar ENTER\n"))
+        texto_salto = (texto,"\n")
+        fo.writelines(texto_salto)
+        bucle = len(texto)
+        if bucle == 0:
+            break
+        else:
+            cantidad_letras += bucle     
+    print("Cantidad de letras ingresadas:", cantidad_letras)
+    fo.close()
+    
+
+
 
 
 def ej3():
@@ -68,10 +94,41 @@ def ej3():
     4) Obtener el mínimo valor de alquiler en "pesos"
     de la cantidad de ambientes deseados.
     '''
+    cantidad_ambientes = int(input("Ingrese la cantidad de Ambientes solicitados:\n"))
+    with open('propiedades.csv') as csvfile:
+        data = list(csv.DictReader(csvfile))
+    # Cargo las variables:
+    cantidad_filas = len(data)
+    moneda_pesos = 0
+    valor_alquiler = 0
+    valor_maximo = 0
+    valor_minimo = 0
+    # Empiezo Bucle para sacar toda la info solicitada
+    for i in range(cantidad_filas):
+        # Agrege esta linea porque algunas lineas no tenian datos y daba error!
+        if data[i].get('ambientes') != "":
+            if cantidad_ambientes == int(data[i].get('ambientes')):
+                if data[i].get('moneda') == "ARS":
+                    moneda_pesos +=1
+                    valor_alquiler += float(data[i].get('precio'))
+                    if valor_maximo < float(data[i].get('precio')):
+                        valor_maximo = float(data[i].get('precio'))
+                    if (valor_minimo == 0) or (valor_minimo > float(data[i].get('precio'))):
+                        valor_minimo = float(data[i].get('precio'))
+  
+
+    promedio = valor_alquiler / moneda_pesos
+    print("Deptos de", cantidad_ambientes, "Hay en alquileres en pesos", moneda_pesos)
+    print("El promedio de estos departamentos son:", promedio)
+    print("valor maximo", valor_maximo)
+    print("valor minimo", valor_minimo)
+
+
+
 
 
 if __name__ == '__main__':
     print("Ejercicios de práctica")
     #ej1()
     #ej2()
-    #ej3()
+    ej3()
