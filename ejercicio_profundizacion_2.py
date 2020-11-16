@@ -11,10 +11,25 @@ Programa creado para que practiquen los conocimietos
 adquiridos durante la semana
 '''
 
-__author__ = "Inove Coding School"
+__author__ = "SEbastiamn Volpe"
 __email__ = "alumnos@inove.com.ar"
 __version__ = "1.2"
 
+
+import csv
+import re
+
+# Creo una funcion para sacar el tiempo y usarlo en el programa
+def calculos_segundos(data,i,keys):
+    valor = data[i].get(keys)
+    dividir = valor.split(sep=":")
+    hora = int(dividir[0])
+    minutos = int(dividir[1])
+    segundos = int(dividir[2])
+    segundos_totales = hora * 3600 + minutos * 60 + segundos 
+    return segundos_totales
+
+     
 
 def ironman():
     print("Ahora sí! buena suerte :)")
@@ -96,7 +111,27 @@ def ironman():
     de Python que resuelva este problema.
 
     '''
+    with open('2019_ironman.csv') as csvfile:
+        data = list(csv.DictReader(csvfile))
 
+    cantidad_filas = len(data)
+    for i in range(cantidad_filas):
+        row = data[i]
+        division = str(row.get("Division"))
+        if data[i].get('Division') != "":
+            MPRo_maximmo = 0
+            total = 0
+            if division == "MPRO":
+                keys = "Swim"
+                total = calculos_segundos(data,i,keys)
+                if (MPRo_maximmo == 0) or (total > MPRo_maximmo):
+                    MPRo_maximmo = total
+    print(MPRo_maximmo)
+
+
+
+
+    
 
 if __name__ == '__main__':
     print("Ejercicios de práctica extra")
