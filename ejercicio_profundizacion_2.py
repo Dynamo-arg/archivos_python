@@ -11,7 +11,7 @@ Programa creado para que practiquen los conocimietos
 adquiridos durante la semana
 '''
 
-__author__ = "SEbastiamn Volpe"
+__author__ = "Sebastian Volpe"
 __email__ = "alumnos@inove.com.ar"
 __version__ = "1.2"
 
@@ -22,14 +22,16 @@ import re
 # Creo una funcion para sacar el tiempo y usarlo en el programa
 def calculos_segundos(data,i,keys):
     valor = data[i].get(keys)
-    dividir = valor.split(sep=":")
-    hora = int(dividir[0])
-    minutos = int(dividir[1])
-    segundos = int(dividir[2])
-    segundos_totales = hora * 3600 + minutos * 60 + segundos 
-    return segundos_totales
-
-     
+    try:
+        dividir = valor.split(sep=":")
+        hora = int(dividir[0])
+        minutos = int(dividir[1])
+        segundos = int(dividir[2])
+        segundos_totales = hora * 3600 + minutos * 60 + segundos 
+        return segundos_totales
+    except:
+        pass
+  
 
 def ironman():
     print("Ahora sí! buena suerte :)")
@@ -111,22 +113,80 @@ def ironman():
     de Python que resuelva este problema.
 
     '''
+    # Abro archivo
     with open('2019_ironman.csv') as csvfile:
         data = list(csv.DictReader(csvfile))
 
+    # Cargo Varibles necesarias
     cantidad_filas = len(data)
+    mpro_maximo_swim = 0
+    mpro_minimo_swim = 0
+    mpro_maximo_bike = 0
+    mpro_minimo_bike = 0
+    mpro_maximo_run = 0
+    mpro_minimo_run = 0
+    sumatoria_swim = 0
+    sumatoria_bike = 0
+    sumatoria_run = 0
+    total = 0
+    conteo1 = 0
+    conteo2 = 0
+    conteo3 = 0
+
+    # Creo un Bucle sacando la info de las 3 categorias
     for i in range(cantidad_filas):
         row = data[i]
         division = str(row.get("Division"))
-        if data[i].get('Division') != "":
-            MPRo_maximmo = 0
-            total = 0
-            if division == "MPRO":
+        if division == "MPRO":
                 keys = "Swim"
                 total = calculos_segundos(data,i,keys)
-                if (MPRo_maximmo == 0) or (total > MPRo_maximmo):
-                    MPRo_maximmo = total
-    print(MPRo_maximmo)
+                try:
+                    if (mpro_maximo_swim == 0) or (total > mpro_maximo_swim):
+                        mpro_maximo_swim = total
+                    if (mpro_minimo_swim == 0) or (total < mpro_minimo_swim):
+                        mpro_minimo_swim = total
+                    sumatoria_swim += total
+                    conteo1 += 1
+                except:
+                    pass
+                keys = "Bike"
+                total = calculos_segundos(data,i,keys)
+                try:
+                    if (mpro_maximo_bike == 0) or (total > mpro_maximo_bike):
+                        mpro_maximo_bike = total
+                    if (mpro_minimo_bike == 0) or (total < mpro_minimo_bike):
+                        mpro_minimo_bike = total
+                    sumatoria_bike += total
+                    conteo2 += 1
+                except:
+                    pass
+                keys = "Run"
+                total = calculos_segundos(data,i,keys)
+                try:
+                    if (mpro_maximo_run == 0) or (total > mpro_maximo_run):
+                        mpro_maximo_run = total
+                    if (mpro_minimo_run == 0) or (total < mpro_minimo_run):
+                        mpro_minimo_run = total
+                    sumatoria_run += total
+                    conteo3 += 1
+                except:
+                    pass
+    
+    # Calculo el promedio y lo almaceno.
+    promedio = sumatoria_swim / conteo1
+    promedio1 = sumatoria_bike / conteo2
+    promedio2 = sumatoria_run / conteo3
+
+    # Imprimo resultados
+    print("El Tiempo MAXIMO de Swim fue:",mpro_maximo_swim)
+    print("El Tiempo MINIMO de Swim fue:",mpro_minimo_swim)
+    print("El PROMEDIO de Swim fue",promedio)
+    print("El Tiempo MAXIMO de Bike fue",mpro_maximo_bike)
+    print("El Tiempo MINIMO de Bike fue",mpro_minimo_bike)
+    print("El PROMEDIO de bike fue",promedio1)
+    print("El Tiempo MAXIMO de Run fue",mpro_maximo_run)
+    print("El Tiempo MINIMO de Run fue",mpro_minimo_run)
+    print("El PROMEDIO de Run fue",promedio2)
 
 
 
